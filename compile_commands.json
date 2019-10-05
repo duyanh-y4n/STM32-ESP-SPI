@@ -1,0 +1,32 @@
+[
+    {
+        "arguments": [
+            "arm-none-eabi-gcc",
+            "-c",
+            "-mcpu=cortex-m4",
+            "-mthumb",
+            "-mfpu=fpv4-sp-d16",
+            "-mfloat-abi=hard",
+            "-DUSE_HAL_DRIVER",
+            "-DSTM32F411xE",
+            "-IInc",
+            "-IDrivers/STM32F4xx_HAL_Driver/Inc",
+            "-IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy",
+            "-IDrivers/CMSIS/Device/ST/STM32F4xx/Include",
+            "-IDrivers/CMSIS/Include",
+            "-Og",
+            "-Wall",
+            "-fdata-sections",
+            "-ffunction-sections",
+            "-g",
+            "-gdwarf-2",
+            "-MFbuild/main.d",
+            "-Wa,-a,-ad,-alms=build/main.lst",
+            "-o",
+            "build/main.o",
+            "Src/main.c"
+        ],
+        "directory": "/home/duyanh_y4n/Work/projects/STM-ESP-SPI/STM32-ESP-SPI",
+        "file": "Src/main.c"
+    }
+]
