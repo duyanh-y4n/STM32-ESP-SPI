@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "stm32f4xx_hal_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -93,14 +94,26 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
-  /*uint8_t data_MISO[32] = "Hello Slave";*/
-  uint8_t data_MISO_1[32] = "FabcabcabcF0123456789FabcabcabcF";
+  uint8_t data_MISO_with_cmd[32] = "FaHello Slave";
+  /*data_MISO_with_cmd[0] = 0x02;//write command 0x04*/
+  /*HAL_SPI_Transmit(&hspi1, data_MISO_with_cmd, 32, HAL_MAX_DELAY);*/
+  /*HAL_Delay(1000);*/
+  /*uint8_t data_MISO_1[32] = "FabcabcabcF0123456789FabcabcabcF";*/
+  uint8_t data_MISO_1[32] = "acbabcabcF0123456789FabcabcabcFF";
   uint8_t data_MISO_2[32] = {
       0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10,
-      0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x20,
+      0x11,0x22,0x23,0x14,0x15,0x16,0x17,0x18,0x19,0x20,
       0x21,0x22,0x23,0x24,0x25,0x26,0x27,0x28,0xFF,0xFF,
-      0xFF,0xFF
+      0x77,0xFF
   };
+  /*HAL_SPI_Transmit(&hspi1, data_MISO_1, 32, HAL_MAX_DELAY);*/
+  /*HAL_Delay(1000);*/
+  /*data_MISO_1[31]=0xFF;*/
+  /*data_MISO_1[30]=0xFF;*/
+  /*data_MISO_1[29]=0xFF;*/
+  /*HAL_SPI_Transmit(&hspi1, data_MISO_1, 32, HAL_MAX_DELAY);*/
+  /*HAL_Delay(1000);*/
+
   
   /* USER CODE END 2 */
 
@@ -108,9 +121,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-      HAL_SPI_Transmit(&hspi1, data_MISO_1, 32, HAL_MAX_DELAY);
-      HAL_Delay(500);
-      HAL_SPI_Transmit(&hspi1, data_MISO_2, 32, HAL_MAX_DELAY);
+      /*HAL_SPI_Transmit(&hspi1, data_MISO_1, 32, HAL_MAX_DELAY);*/
+      /*HAL_Delay(500);*/
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+      HAL_SPI_Transmit(&hspi1, data_MISO_with_cmd, 32, HAL_MAX_DELAY);
+      HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
       HAL_Delay(500);
     /* USER CODE END WHILE */
 
@@ -207,9 +222,21 @@ static void MX_SPI1_Init(void)
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PC0 */
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
 }
 
