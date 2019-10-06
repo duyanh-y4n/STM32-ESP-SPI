@@ -94,12 +94,15 @@ int main(void)
   MX_SPI1_Init();
   /* USER CODE BEGIN 2 */
 
-  uint8_t data_MISO_with_cmd[32] = "FaHello Slave";
+  uint8_t spi_send_MOSI_cmd[2]={0x02, 0x00};
+  const uint16_t spi_cmd_size = 2;
+  uint8_t data_MISO_with_cmd[32] = "Hello Slave";
   /*data_MISO_with_cmd[0] = 0x02;//write command 0x04*/
+  /*data_MISO_with_cmd[1] = 0x00;//write command 0x04*/
   /*HAL_SPI_Transmit(&hspi1, data_MISO_with_cmd, 32, HAL_MAX_DELAY);*/
   /*HAL_Delay(1000);*/
   /*uint8_t data_MISO_1[32] = "FabcabcabcF0123456789FabcabcabcF";*/
-  uint8_t data_MISO_1[32] = "acbabcabcF0123456789FabcabcabcFF";
+  uint8_t data_MISO_1[32] = "Facbabcabc0123456789FabcabcabcFF";
   uint8_t data_MISO_2[32] = {
       0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x10,
       0x11,0x22,0x23,0x14,0x15,0x16,0x17,0x18,0x19,0x20,
@@ -124,7 +127,15 @@ int main(void)
       /*HAL_SPI_Transmit(&hspi1, data_MISO_1, 32, HAL_MAX_DELAY);*/
       /*HAL_Delay(500);*/
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
+      HAL_SPI_Transmit(&hspi1, spi_send_MOSI_cmd, spi_cmd_size, HAL_MAX_DELAY);
+      HAL_SPI_Transmit(&hspi1, data_MISO_1, 32, HAL_MAX_DELAY);
+      HAL_Delay(1);
+      HAL_SPI_Transmit(&hspi1, spi_send_MOSI_cmd, spi_cmd_size, HAL_MAX_DELAY);
+      HAL_SPI_Transmit(&hspi1, data_MISO_2, 32, HAL_MAX_DELAY);
+      HAL_Delay(1);
+      HAL_SPI_Transmit(&hspi1, spi_send_MOSI_cmd, spi_cmd_size, HAL_MAX_DELAY);
       HAL_SPI_Transmit(&hspi1, data_MISO_with_cmd, 32, HAL_MAX_DELAY);
+      HAL_Delay(1);
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_RESET);
       HAL_Delay(500);
     /* USER CODE END WHILE */
