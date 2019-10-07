@@ -6,7 +6,7 @@ import os
 server = "JLinkGDBServer"
 interface = "swd"
 #device = input('Device/MCU= ')
-device = "STM32F411VE"
+device = "STM32F429ZI"
 endian = "little"
 speed = "4000"
 port = "2338"
